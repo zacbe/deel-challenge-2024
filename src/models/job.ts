@@ -34,7 +34,13 @@ export function initJob(sequelize: Sequelize): typeof Job {
     },
     {
       sequelize,
-      modelName: 'Job'
+      modelName: 'Job',
+      indexes: [
+        {
+          name: "idx_jobs_on_contractid_and_paid",
+          fields: ["ContractId", "paid"],
+        },
+      ],
     }
   );
 
