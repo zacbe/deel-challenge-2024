@@ -1,6 +1,6 @@
-import express, { Express } from 'express';
+import express, { Express, Request, Response } from 'express';
 import bodyParser from 'body-parser';
-import { sequelize } from './model';
+import { sequelize } from './models';
 import { contractRouter, jobRouter, profileRouter, adminRouter } from './routers';
 
 
@@ -20,7 +20,19 @@ app.use('/jobs', jobRouter);
 app.use('/balances', profileRouter);
 app.use('/admin', adminRouter);
 app.get('/', (_req: Request, res: Response) => {
-    return res.json({ message: 'Hello World!' });
+  res.send(`
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>API Documentation</title>
+      </head>
+      <body>
+        <h1>Deel API</h1>
+      </body>
+      </html>
+    `);
 });
 
 export default app;
