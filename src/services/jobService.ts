@@ -26,26 +26,27 @@ async function processJobPaymentById(jobId: string, profileId: number | undefine
 
   try {
     await sequelize.transaction(async (t: typeof Transaction) => {
-      const job = await Job.findByPk(jobId);
+      const job = await Job.findByPk(jobId, { transaction: t });
       if (!job) throw new Error("Job not found");
       if (job.paid) throw new Error("Job has already been paid");
 
-      const contract = await job.getContract();
-      const client = await contract.getClient({ where: { id: profileId } });
+      const contract = await job.getContract({ transaction: t });
+      const client = await contract.getClient({ where: { id: profileId }, transaction: t });
       if (!client) throw new Error("Client not found");
       if (client.balance < job.price) throw new Error("Insufficient funds");
 
-      const contractor = await contract.getContractor();
+      const contractor = await contract.getContractor({ transaction: t });
 
       client.balance -= job.price;
       contractor.balance += job.price;
       job.paid = true;
       job.paymentDate = new Date();
 
-      await client.save({ transaction: t })
-      await contractor.save({ transaction: t })
-      await job.save({ transaction: t })
-
+      await Promise.all([
+        client.save({ transaction: t }),
+        contractor.save({ transaction: t }),
+        job.save({ transaction: t }),
+      ]);
     });
 
     console.info("Transaction completed successfully");
