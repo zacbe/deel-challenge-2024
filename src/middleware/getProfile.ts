@@ -1,10 +1,13 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express'
 
 const getProfile = async (req: Request, res: Response, next: NextFunction) => {
     const { Profile } = req.app.get('models')
-    const profile = await Profile.findOne({ where: { id: req.get('profile_id') || 0 } })
-    if (!profile) return res.status(401).end()
+    const profileId = req.headers["profile_id"];
+    const profile = await Profile.findByPk(profileId);
+
+    if (!profile) return res.status(401).json({ message: "Unauthorized" });
     req.profile = profile
-    next()
+    next();
 }
+
 export default getProfile;
