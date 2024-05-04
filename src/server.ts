@@ -1,15 +1,20 @@
-import app from './app';
+import express, { Express } from 'express';
+import bodyParser from 'body-parser';
+import { sequelize } from './model';
+import contractRouter from './routers/contractRouter';
 
 
-init();
 
-async function init() {
-  try {
-    app.listen(3001, () => {
-      console.log('Express App Listening on Port 3001');
-    });
-  } catch (error) {
-    console.error(`An error occurred: ${JSON.stringify(error)}`);
-    process.exit(1);
-  }
-}
+const app: Express = express();
+
+// Middlewares
+app.use(bodyParser.json());
+
+// Sequelize
+app.set("sequelize", sequelize);
+app.set("models", sequelize.models);
+
+// Routes
+app.use('/contracts', contractRouter,);
+
+export default app;
