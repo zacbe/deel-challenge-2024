@@ -1,7 +1,16 @@
-
 import { Request, Response, NextFunction } from 'express';
+import { findAllUnpaidJobsByProfile } from '../../services/jobService';
 
+export default async function handler(req: Request, res: Response, next: NextFunction): Promise<void> {
+  const models = req.app.get("models");
+  const profileId = req.profile?.id
 
-export default async function handler(_req: Request, res: Response, _next: NextFunction): Promise<void> {
-  res.json({ message: 'findUnpaid' });
+  try {
+    const jobs = await findAllUnpaidJobsByProfile(profileId, models);
+    res.json({ jobs });
+  } catch (e) {
+    next(e);
+  }
+
 }
+
