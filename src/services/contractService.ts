@@ -13,4 +13,17 @@ async function findContractById(contractId: string, profileId: number | undefine
   });
 }
 
-export { findContractById };
+async function findActiveContracts(profileId: number | undefined, contract: any): Promise<Contract[]> {
+  return contract.findAll({
+    where: {
+      status: { [Op.not]: "terminated" },
+      [Op.or]: [
+        { ClientId: profileId },
+        { ContractorId: profileId }
+      ]
+    },
+    raw: true,
+  });
+}
+
+export { findContractById, findActiveContracts };
