@@ -1,7 +1,7 @@
 import express, { Express } from 'express';
 import bodyParser from 'body-parser';
 import { sequelize } from './model';
-import contractRouter from './routers/contractRouter';
+import { contractRouter, jobRouter } from './routers';
 
 
 
@@ -16,5 +16,6 @@ app.set("models", sequelize.models);
 
 // Routes
 app.use('/contracts', contractRouter,);
+app.use('/jobs', jobRouter);
 
 export default app;
