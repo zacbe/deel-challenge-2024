@@ -1,4 +1,4 @@
-import { Op, Transaction } from "sequelize"
+import { Op, Transaction, fn, col } from "sequelize"
 import _ from "lodash"
 
 async function updateClientBalance(userId: string, depositAmount: number, models: any): Promise<void> {
@@ -39,7 +39,41 @@ async function updateClientBalance(userId: string, depositAmount: number, models
   }
 }
 
+async function getBestPayedProfession(start: string, end: string, models: any): Promise<void> {
+  const { Profile, Contract, Job } = models;
+
+  const results = await Job.findAll({
+    attributes: [[fn("SUM", col("price")), "totalEarnings"]],
+    include: {
+      model: Contract,
+      attributes: [],
+      include: {
+        model: Profile,
+        as: "Contractor",
+        attributes: ["profession"],
+        where: { type: "contractor" },
+      },
+    },
+    where: {
+      paymentDate: {
+        [Op.gte]: start,
+        [Op.lte]: end,
+      },
+      paid: true,
+    },
+    group: ["Contract.Contractor.profession"],
+    order: [[col("totalEarnings"), "DESC"]],
+    limit: 1,
+    raw: true,
+  });
+
+  const path = "Contract.Contractor.profession";
+  const profession = _.get(results, `[0]["${path}"]`, null);
+  return profession;
+}
+
 
 export {
-  updateClientBalance
+  updateClientBalance,
+  getBestPayedProfession
 };
