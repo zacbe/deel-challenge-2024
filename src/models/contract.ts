@@ -25,6 +25,16 @@ export function initContract(sequelize: Sequelize): typeof Contract {
     {
       sequelize,
       modelName: 'Contract',
+      indexes: [
+        {
+          name: "idx_contract_client",
+          fields: ["ClientId", "status"],
+        },
+        {
+          name: "idx_contract_contractor",
+          fields: ["ContractorId", "status"],
+        },
+      ]
     }
   );
 
