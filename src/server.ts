@@ -6,6 +6,7 @@ import { contractRouter, jobRouter, profileRouter, adminRouter } from './routers
 import swaggerUi from "swagger-ui-express"
 import swaggerFile from "../docs/swagger-output.json";
 import { env } from './utils/envConfig';
+import { errorHandler } from './middleware';
 
 
 const corsOptions = {
@@ -47,5 +48,6 @@ app.get('/', (_req: Request, res: Response) => {
     `);
 });
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.use(errorHandler);
 
 export default app;

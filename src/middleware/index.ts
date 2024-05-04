@@ -1,3 +1,4 @@
 import getProfile from "./getProfile";
+import errorHandler from "./errorHandler";
 
-export { getProfile };
+export { getProfile, errorHandler };
