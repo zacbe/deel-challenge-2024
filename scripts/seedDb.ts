@@ -1,4 +1,4 @@
-import { Profile, Contract, Job } from "../src/model";
+import { Profile, Contract, Job } from "../src/models";
 
 /* WARNING THIS WILL DROP THE CURRENT DATABASE */
 seed();
