@@ -7,7 +7,8 @@ async function updateClientBalance(userId: string, depositAmount: number, models
   try {
     await sequelize.transaction(async (t: typeof Transaction) => {
       const client = await Profile.findByPk(userId, {
-        where: { type: "client" }
+        where: { type: "client" },
+        transaction: t,
       });
 
       if (!client) throw new Error("Profile is not a client");
@@ -22,7 +23,8 @@ async function updateClientBalance(userId: string, depositAmount: number, models
         ],
         where: {
           paid: { [Op.eq]: false },
-        }
+        },
+        transaction: t,
       });
 
       const maxDeposit = total * 0.25;
@@ -113,9 +115,8 @@ async function getBestPayingClients(start: string, end: string, limit: number = 
   }));
 }
 
-
 export {
   updateClientBalance,
   getBestPayedProfession,
-  getBestPayingClients
+  getBestPayingClients,
 };
