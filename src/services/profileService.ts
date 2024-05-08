@@ -6,8 +6,8 @@ async function updateClientBalance(userId: string, depositAmount: number, models
 
   try {
     await sequelize.transaction(async (t: typeof Transaction) => {
-      const client = await Profile.findByPk(userId, {
-        where: { type: "client" },
+      const client = await Profile.findOne({
+        where: { id: userId, type: "client" },
         transaction: t,
       });
 

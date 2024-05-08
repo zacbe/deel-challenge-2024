@@ -26,7 +26,7 @@ async function processJobPaymentById(jobId: string, profileId: number | undefine
 
   try {
     await sequelize.transaction(async (t: typeof Transaction) => {
-      const job = await Job.findByPk(jobId, { transaction: t });
+      const job = await Job.findOne({ where: { id: jobId }, transaction: t });
       if (!job) throw new Error("Job not found");
       if (job.paid) throw new Error("Job has already been paid");
 
