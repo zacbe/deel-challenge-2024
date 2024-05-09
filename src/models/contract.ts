@@ -38,7 +38,8 @@ export function initContract(sequelize: Sequelize): typeof Contract {
           name: "idx_contracts_on_clientid_contractorid_status",
           fields: ["ClientId", "ContractorId", "status"],
         },
-      ]
+      ],
+      timestamps: false
     }
   );
 

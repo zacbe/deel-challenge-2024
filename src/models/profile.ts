@@ -37,6 +37,7 @@ export function initProfile(sequelize: Sequelize): typeof Profile {
   }, {
     sequelize,
     modelName: 'Profile',
+    timestamps: false
   });
 
   return Profile;

@@ -41,6 +41,7 @@ export function initJob(sequelize: Sequelize): typeof Job {
           fields: ["ContractId", "paid"],
         },
       ],
+      timestamps: false
     }
   );
 
